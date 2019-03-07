@@ -1,0 +1,30 @@
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <form class="new-entry">
+                    <input type="text" name="city" placeholder="Type city name"/>
+                </form>
+            </div>
+
+            <div style="float: right;">
+                    {{> loginButtons}}
+            </div>
+        </header>
+
+        <table>
+            <tr>
+                <th>City</th>
+                <th>Country</th>
+                <th>Temperature</th>
+                <th>Humidity</th>
+                <th>Feeling</th>
+                <th>Time</th>
+            </tr>
+            
+                {{#each weatherData}}
+                    {{> weather}}
+                {{/each}} 
+        </table>
+    </div>
+</body>

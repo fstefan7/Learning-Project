@@ -1,0 +1,9 @@
+{
+    "public": {
+     
+   },
+   "weatherApi": {
+        "appid": "3ac0ae1c9464e008f847f80b363b63fc",
+        "units": "metric"
+   }
+ }
