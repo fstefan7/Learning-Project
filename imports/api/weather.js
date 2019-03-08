@@ -16,11 +16,11 @@ Meteor.methods({
     },
 
     'weather.insert'(weather) {
-        if (!isValidWeather) {
+        if (!isValidWeather(weather)) {
             throw new Meteor.Error(400, 'Weather has not correct attributes');
         }
 
-        insertOrUpdateWeather(weather);
+        insertOrUpdateWeather(weather, Meteor.user(), Meteor.userId());
     },
 
     'weather.remove'(weatherId) {
@@ -94,10 +94,10 @@ function isValidWeather(weather) {
     return true;
 };
 
-function insertOrUpdateWeather(weather) {
+function insertOrUpdateWeather(weather, user, userId) {
     Weather.update(
         { city: weather.city,
-            owner: Meteor.userId()
+            owner: userId
         }, 
         { city: weather.city,
             country: weather.country,
@@ -105,8 +105,8 @@ function insertOrUpdateWeather(weather) {
             humidity: weather.humidity,
             feeling: weather.feeling,
             time: weather.time,
-            owner: Meteor.userId(),
-            username: Meteor.user() && Meteor.user().username,
+            owner: userId,
+            username: user && user.username,
         }, 
         { upsert: true }
     );
