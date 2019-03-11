@@ -15,12 +15,14 @@ Meteor.methods({
         return getWeather(city);
     },
 
-    'weather.insert'(weather) {
+    'weather.insert'(weather, template) {
         if (!isValidWeather(weather)) {
             throw new Meteor.Error(400, 'Weather has not correct attributes');
         }
 
-        insertOrUpdateWeather(weather, Meteor.user(), Meteor.userId());
+        if (Meteor.user()) {
+            insertOrUpdateDBWeather(weather, Meteor.user(), Meteor.userId());
+        }
     },
 
     'weather.remove'(weatherId) {
@@ -47,7 +49,6 @@ function buildWeatherObject(httpResponse) {
         time: date.toISOString().split('T')[0],
     };
     
-    console.log(weather.time)
     return weather;
 };
 
@@ -69,7 +70,6 @@ function getWeather(city) {
         return weather;
       } catch (err) {
         if (!err || !err.response || !err.response.statusCode) {
-            console.log(err)
             throw new Meteor.Error(500, 'There was an error calling the API')
         }
 
@@ -94,7 +94,7 @@ function isValidWeather(weather) {
     return true;
 };
 
-function insertOrUpdateWeather(weather, user, userId) {
+function insertOrUpdateDBWeather(weather, user, userId) {
     Weather.update(
         { city: weather.city,
             owner: userId
